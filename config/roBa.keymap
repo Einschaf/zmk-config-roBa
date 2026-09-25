@@ -53,6 +53,27 @@
             bindings = <&kp EQUAL>;
             key-positions = <24 25>;
         };
+
+        esc {
+            bindings = <&kp ESC>;
+            key-positions = <0 1>;
+            layers = <0>;
+        };
+
+        mouse {
+            bindings = <&mkp MB1>;
+            key-positions = <17 18>;
+        };
+
+        mouse2 {
+            bindings = <&mkp MB2>;
+            key-positions = <18 19>;
+        };
+
+        mouse3 {
+            bindings = <&mkp MB3>;
+            key-positions = <17 18 19>;
+        };
     };
 
     macros {
