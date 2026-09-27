@@ -62,17 +62,17 @@
 
         mouse {
             bindings = <&mkp MB1>;
-            key-positions = <17 18>;
+            key-positions = <19 18>;
         };
 
         mouse2 {
             bindings = <&mkp MB2>;
-            key-positions = <18 19>;
+            key-positions = <19 20>;
         };
 
         mouse3 {
             bindings = <&mkp MB3>;
-            key-positions = <17 18 19>;
+            key-positions = <18 19 20>;
         };
     };
 
