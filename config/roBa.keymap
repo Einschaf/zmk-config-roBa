@@ -3,6 +3,11 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
 
+// The host OS uses the US keyboard layout, where Henkan/Muhenkan do nothing.
+// Microsoft IME is set to: Shift+Space = IME on, Ctrl+Space = IME off.
+#define IME_ON  LS(SPACE)
+#define IME_OFF LC(SPACE)
+
 &mt {
     flavor = "balanced";
     quick-tap-ms = <0>;
@@ -41,7 +46,7 @@
         };
 
         muhennkann {
-            bindings = <&to_layer_0 INT_MUHENKAN>;
+            bindings = <&to_layer_0 IME_OFF>;
             key-positions = <11 10>;
         };
 
@@ -104,8 +109,8 @@
             bindings = <
 &kp Q             &kp W         &kp E         &kp R      &kp T                                                 &kp Y            &kp U  &lt 3 I    &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F      &kp G               &kp ESC          &kp RIGHT_SHIFT  &kp H            &kp J  &kp K      &kp L    &kp QUESTION
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B               &kp DEL          &kp INT_HENKAN   &kp N            &kp M  &kp COMMA  &kp DOT  &kp MINUS
-&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 3 TAB  &lt 1 INT_MUHENKAN  &lt 2 SPACE      &kp ENTER        &lt 3 BACKSPACE                             &kp EXCL
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B               &kp DEL          &kp IME_ON       &kp N            &kp M  &kp COMMA  &kp DOT  &kp MINUS
+&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 3 TAB  &lt 1 IME_OFF       &lt 2 SPACE      &kp ENTER        &lt 3 BACKSPACE                             &kp EXCL
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
