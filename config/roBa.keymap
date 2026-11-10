@@ -5,8 +5,9 @@
 
 // The host OS uses the US keyboard layout, where Henkan/Muhenkan do nothing.
 // Microsoft IME is set to: Shift+Space = IME on, Ctrl+Space = IME off.
-#define IME_ON  LS(SPACE)
-#define IME_OFF LC(SPACE)
+// The IME only reacts when the modifier is already held before Space goes
+// down, so these are sent as press-modifier / tap-Space / release-modifier
+// macros (ime_on, ime_off) rather than as LS(SPACE) / LC(SPACE).
 
 &mt {
     flavor = "balanced";
@@ -46,7 +47,7 @@
         };
 
         muhennkann {
-            bindings = <&to_layer_0 IME_OFF>;
+            bindings = <&ime_off_to_base>;
             key-positions = <11 10>;
         };
 
@@ -89,6 +90,38 @@
             bindings = <&to 0 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
             label = "TO_LAYER_0";
         };
+
+        ime_on: ime_on {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_press &kp LSHIFT>
+                , <&macro_tap &kp SPACE>
+                , <&macro_release &kp LSHIFT>
+                ;
+        };
+
+        // One-param form so it can be the tap side of a hold-tap; the param is ignored.
+        ime_off: ime_off {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings
+                = <&macro_press &kp LCTRL>
+                , <&macro_tap &kp SPACE>
+                , <&macro_release &kp LCTRL>
+                ;
+        };
+
+        ime_off_to_base: ime_off_to_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &to 0>
+                , <&macro_press &kp LCTRL>
+                , <&macro_tap &kp SPACE>
+                , <&macro_release &kp LCTRL>
+                ;
+        };
     };
 
     behaviors {
@@ -100,6 +133,15 @@
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
+
+        // Like &lt, but the tap turns the IME off.
+        lt_ime_off: lt_ime_off {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&ime_off>;
+        };
     };
 
     keymap {
@@ -109,8 +151,8 @@
             bindings = <
 &kp Q             &kp W         &kp E         &kp R      &kp T                                                 &kp Y            &kp U  &lt 3 I    &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F      &kp G               &kp ESC          &kp RIGHT_SHIFT  &kp H            &kp J  &kp K      &kp L    &kp QUESTION
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B               &kp DEL          &kp IME_ON       &kp N            &kp M  &kp COMMA  &kp DOT  &kp MINUS
-&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 3 TAB  &lt 1 IME_OFF       &lt 2 SPACE      &kp ENTER        &lt 3 BACKSPACE                             &kp EXCL
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B               &kp DEL          &ime_on          &kp N            &kp M  &kp COMMA  &kp DOT  &kp MINUS
+&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 3 TAB  &lt_ime_off 1 0     &lt 2 SPACE      &kp ENTER        &lt 3 BACKSPACE                             &kp EXCL
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
